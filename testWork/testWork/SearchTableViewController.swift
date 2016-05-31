@@ -8,32 +8,25 @@
 
 import UIKit
 
-class SearchTableViewController: UITableViewController {
+protocol sendArrayDelegate {   // делегат для получения массива станций
+	func sendStationArrayDelegate(info: [Station])
+}
 
-	//	func downloadData()
-	var error:NSError?
-	var	list:String? = nil
-	var array = [String]()					    // массив Данных
-	var dialoguesArray = [String]()			    // массив Диалогов
-	var	variableArray = [String]()				// массив Переменных
-	
+
+class SearchTableViewController: UITableViewController, sendArrayDelegate {
 	
 	let jsonLoadURL = "https://raw.githubusercontent.com/tutu-ru/hire_ios-test/master/allStations.json"
 	var stationsArray = [Station]()
 	
+	var delegateStatino: sendArrayDelegate?
 	
 	
     override func viewDidLoad() {
         super.viewDidLoad()
-
-		getStations()
+		getStations ()
 		
-//		let num = stationsArray.count
-//		var i = 0
-//		for i in stationsArray {
-//		let str = stationsArray[i]
-//		
-//		}
+		let str = stationsArray[3]
+		print(str.cityTitle)
 		// Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -41,7 +34,9 @@ class SearchTableViewController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
 
-
+	func sendStationArrayDelegate(info: [Station]) {
+		stationsArray = info
+	}
 	
 	
     override func didReceiveMemoryWarning() {
@@ -65,74 +60,55 @@ class SearchTableViewController: UITableViewController {
 	
 	
 	func getStations (){
- 		 let request = NSURLRequest(URL: NSURL(string: jsonLoadURL)!) // задали url
-		 let urlSession = NSURLSession.sharedSession()				  // создали сессию
+ 		 let request = NSURLRequest(URL: NSURL(string: jsonLoadURL)!)				// задали url
+		 let urlSession = NSURLSession.sharedSession()								// создали сессию
 		 let task = urlSession.dataTaskWithRequest(request, completionHandler: { // поставили задачу для сессии																	// с замыканием
 			(data, respons, error) -> Void in
 			
-			if let error = error{									// для начало проверка на ошибки
+			if let error = error{											// для начало проверка на ошибки
 				print(error)
 				return
 			}
 			
 			// парсим
 			if let data = data {
-			//	print(data)
 				self.stationsArray = self.parseJsonData(data)
-				
-//				NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
-//					self.tableView.reloadData()
-//				
-//				})
 			}
 			
 		})
+		delegateStatino?.sendStationArrayDelegate(stationsArray)
 		task.resume()
 	}
-	
+
+
 	
 	func parseJsonData(data: NSData) -> [Station] {
+		var arrayST = [Station]()
 		do{
 			// преворощаем JSONdata в NSDictionary
 			let jsonResult = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers) as? NSDictionary
-			
-			//print(jsonResult)
+
 			// Парсим нужные куски
 			
 			let jsonCountrys = jsonResult!["citiesFrom"] as! [AnyObject]
-		//	print(jsonStations)
+
 			for jsonCountry in jsonCountrys {
 				let station = Station()
 				station.countryTitle = jsonCountry["countryTitle"] as! String
-				//print(station.countryTitle)
 				station.cityTitle = jsonCountry["cityTitle"] as! String
-				//print(station.cityTitle)
 				let destinations = jsonCountry["stations"] as! [AnyObject]
-				//print(station)
 				 for destination in destinations {
 				 station.cityTitleReplica = destination["cityTitle"] as! String
-				 //print(station.cityTitle)
 				 station.regionTitle = destination["regionTitle"] as! String
-				// print(station.regionTitle)
 				 station.stationTitle = destination["stationTitle"]! as! String
-			 //    print(station.stationTitle)
-				 
-				
-				    stationsArray.append(station)
-					
-					print(station.countryTitle)
-					print(station.cityTitle)
-					print(station.cityTitleReplica)
-					print(station.regionTitle)
-					print(station.stationTitle)
-					print("")
+				    arrayST.append(station)
+
 				}
 			}
 		} catch { // если попытка не удаласть
 			print(error)
 		}
-		
-		return stationsArray
+		return arrayST
 	}
 }
 

@@ -1,15 +1,14 @@
 //
 //  AppDelegate.swift
-//  testWork
+//  localParseJson
 //
-//  Created by Филипп on 27.05.16.
+//  Created by Филипп on 30.05.16.
 //  Copyright © 2016 Chuwachesku. All rights reserved.
 //
 
 import UIKit
 
 @UIApplicationMain
-
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	var window: UIWindow?

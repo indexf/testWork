@@ -13,11 +13,9 @@ class Station{
 	var countryTitle: String = ""
 	var cityTitle: String = ""
 	
-	var cityTitleReplica: String = ""
+	var cityTitleReplica	: String = ""
 	var regionTitle: String = ""
 	var stationTitle: String = ""
-	
-	      
 }
 
 
@@ -67,4 +65,3 @@ class Station{
 //	// полное именование станции
 //	"stationTitle" : "International Busterminal, Edbergstarsse 200 A"
 //},
-
