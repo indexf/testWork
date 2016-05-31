@@ -8,29 +8,15 @@
 
 import Foundation
 
-
 class Station{
 	
-	var countryTitle = ""
-	var cityTitle = ""
-	var cityTitleReplica = ""
-	var regionTitle = ""
-	var stationTitle = ""
+	var countryTitle: String = ""
+	var cityTitle: String = ""
 	
-	init(countryTitle: String,
-	     cityTitle: String,
-	     cityTitleReplica: String,
-	     regionTitle: String,
-	     stationTitle: String )
-	{
-		
-		self.countryTitle = countryTitle
-		self.cityTitle = cityTitle
-		self.cityTitleReplica = cityTitleReplica
-		self.regionTitle = regionTitle
-		self.stationTitle = stationTitle
-		
-	}
-	
-	
+	var cityTitleReplica	: String = ""
+	var regionTitle: String = ""
+	var stationTitle: String = ""
 }
+
+
+

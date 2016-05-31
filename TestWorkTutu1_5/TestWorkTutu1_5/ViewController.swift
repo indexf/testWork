@@ -17,47 +17,43 @@ class ViewController: UIViewController, stationDataDelegate{
 	
 	@IBAction func bayButtun(sender: UIButton) {
 		
-		if fromLabel.text == "" || toLabel.text == "" {
-			let alertController = UIAlertController(title: "Статус заказа", message: "Выберите пункты отправления и назначания!", preferredStyle: .Alert)// создали алёрт
+		if fromLabel.text == "" || toLabel.text == "" {		// если станцию не выбрали, выводим подсказку
+			let alertController = UIAlertController(title: "Статус заказа", message: "Выберите пункты отправления и назначания!", preferredStyle: .Alert)													  // создали алёрт
 			let alertOkAction = UIAlertAction(title: "Ок", style: .Default, handler: nil) // создали кнопку
-			alertController.addAction(alertOkAction)// привезали одно к другому
-			
-			presentViewController(alertController, animated: true, completion: nil)// выводим алёрт
+			alertController.addAction(alertOkAction)									  // привезали одно к другому
+			presentViewController(alertController, animated: true, completion: nil)		  // выводим алёрт
 
-		} else {
+		} else {											// если выбор есть тогда выводим результат
 			let text = "Билет из от станции " + fromLabel.text! + " \n"+"До станции "+toLabel.text!
-		let alertController = UIAlertController(title: "Статус заказа", message: text, preferredStyle: .Alert)// создали алёрт
-		let alertOkAction = UIAlertAction(title: "Купить", style: .Default, handler: nil) // создали кнопку
-		alertController.addAction(alertOkAction)// привезали одно к другому
-		
-		presentViewController(alertController, animated: true, completion: nil)// выводим алёрт
+		let alertController = UIAlertController(title: "Статус заказа", message: text, preferredStyle: .Alert)	// создали алёрт
+		let alertOkAction = UIAlertAction(title: "Купить", style: .Default, handler: nil)						// создали кнопку
+		alertController.addAction(alertOkAction)																// привезали одно к другому
+		presentViewController(alertController, animated: true, completion: nil)									// выводим алёрт
 		}
 	}
-	
-	
-	var backProperty = "back"
+
+// == Делегат var =================
+
 	var number = 0
+
+// == main ========================
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		fromLabel.text = ""
 		toLabel.text = ""
-		
-		print(backProperty)
-		
-		
-		// Do any additional setup after loading the view, typically from a nib.
 	}
 
 	override func didReceiveMemoryWarning() {
 		super.didReceiveMemoryWarning()
 		// Dispose of any resources that can be recreated.
 	}
+	
 // == Делегат =========
 
 	func sendResultStation(info: String) {
 		print(info)
-
+		// куда писать полученный текст
 		if number == 1 {
 		fromLabel.text = info
 		}
@@ -66,13 +62,14 @@ class ViewController: UIViewController, stationDataDelegate{
 		}
 	}
 	
-//== Сега ==========
+//== Segue ============
+	
 	override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
 		if segue.identifier == "fromSegue"{
 			number = 1 // ключ
 		let destinationViewController = segue.destinationViewController as! SearchTableViewController
 			destinationViewController.delegate = self// подписались на делегата, (билет обратно)
-			destinationViewController.property = "От куда"
+			destinationViewController.propertySegue = 1
 		
 		
 		}
@@ -80,16 +77,11 @@ class ViewController: UIViewController, stationDataDelegate{
 			number = 2 // ключ
 			let destinationViewController = segue.destinationViewController as! SearchTableViewController
 			destinationViewController.delegate = self// подписались на делегата
-			destinationViewController.property = "Куда"
+			destinationViewController.propertySegue = 2
 			
-
 		}
-
-		
 	}
-	
-//==============
-}
+}//class
 
 
 
